@@ -121,6 +121,39 @@ public class Canvas {
 	return circle(cx, cy, z, r, new Pixel(0,0,0));
     }
 
+    public boolean box(double x, double y, double z, 
+		       double dx, double dy, double dz, pixel p) {
+	Matrix em = box_edges(x,y,z,dx,dy,dz,p);
+	matrix.append(em);
+	return true;
+    }
+    public boolean box(double x, double y, double z, 
+		       double dx, double dy, double dz) {
+	return box(x, y, z, dx, dy, dz, new Pixel(0,0,0));
+    }
+    public Matrix box_edges(double x, double y, double z, 
+			    double dx, double dy, double dz, Pixel p) {
+	Matrix em = new Matrix();
+	em.add_edge(x,y,z,x+dx,y,z,p);
+	em.add_edge(x,y,z,x,y-dy,z,p);
+	em.add_edge(x,y,z,x,y,z-dz,p);
+	em.add_edge(x+dx,y,z,x+dx,y-dy,z,p);
+	em.add_edge(x+dx,y,z,x+dx,y,z-dz,p);
+	em.add_edge(x,y-dy,z,x+dx,y-dy,z,p);
+	em.add_edge(x,y-dy,z,x,y-dy,z-dz,p);
+	em.add_edge(x,y,z-dz,x+dx,y,z-dz,p);
+	em.add_edge(x,y,z-dz,x,y-dy,z-dz,p);
+	em.add_edge(x+dx,y-dy,z,x+dx,y-dy,z-dz,p);
+	em.add_edge(x+dx,y,z-dz,x+dx,y-dy,z-dz,p);
+	em.add_edge(x,y-dy,z-dz,x+dx,y-dy,z-dz,p);
+	return em;
+    }
+    public Matrix box_edges(double x, double y, double z, 
+			    double dx, double dy, double dz, Pixel p) {
+	    return box_edges(x, y, z, dx, dy, dz, new Pixel(0,0,0));
+    }
+
+
     public boolean hermite(double x0, double y0, double x1, double y1,
 			   double dx0, double dy0, double dx1, double dy1, Pixel p) {
 	// Why Use A Matrix When You Can Just Multiply? Efficiency is important! 

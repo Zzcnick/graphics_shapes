@@ -85,6 +85,16 @@ public class Matrix {
 	colors.add(p);
 	return true;
     }
+    
+    // Will pass as array references - not copies
+    public int append(Matrix m) {
+	int l = m.length;
+	while (i < l) {
+	    this.matrix.add(m.get(i));
+	    i++;
+	}
+	return i;
+    }
 
     // Accessors + Mutators
     public double get(int r, int c) {
