@@ -122,7 +122,7 @@ public class Canvas {
     }
 
     public boolean box(double x, double y, double z, 
-		       double dx, double dy, double dz, pixel p) {
+		       double dx, double dy, double dz, Pixel p) {
 	Matrix em = box_edges(x,y,z,dx,dy,dz,p);
 	matrix.append(em);
 	return true;
@@ -153,7 +153,32 @@ public class Canvas {
 	    return box_edges(x, y, z, dx, dy, dz, new Pixel(0,0,0));
     }
 
+    public boolean sphere(double x, double y, double z, double r, Pixel p) {
+	return false;
+    }
+    public boolean sphere(double x, double y, double z, double r) {
+	return sphere(x, y, z, r, new Pixel(0,0,0));
+    }
+    public Matrix sphere_edges(double x, double y, double z, double r, Pixel p) {
+	return new Matrix();
+    }
+    public Matrix sphere_edges(double x, double y, double z, double r) {
+	return sphere_edges(x, y, z, r, new Pixel(0,0,0));
+    }
 
+    public boolean torus(double x, double y, double z, double r, double R, Pixel p) {
+	return false;
+    }
+    public boolean torus(double x, double y, double z, double r, double R) {
+	return torus(x, y, z, r, R, new Pixel(0,0,0));
+    }
+    public Matrix torus_edges(double x, double y, double z, double r, double R, Pixel p) {
+	return new Matrix();
+    }
+    public Matrix torus_edges(double x, double y, double z, double r, double R) {
+	return torus_edges(x, y, z, r, R, new Pixel(0,0,0));
+    }
+	
     public boolean hermite(double x0, double y0, double x1, double y1,
 			   double dx0, double dy0, double dx1, double dy1, Pixel p) {
 	// Why Use A Matrix When You Can Just Multiply? Efficiency is important! 

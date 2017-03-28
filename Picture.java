@@ -26,6 +26,14 @@ public class Picture {
 			      sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble());
 		} else if (cmd.equals("circle")) {
 		    c.circle(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble());
+		} else if (cmd.equals("box")) {
+		    c.box(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(),
+			  sc.nextDouble(), sc.nextDouble(), sc.nextDouble());
+		} else if (cmd.equals("sphere")) {
+		    c.sphere(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble());
+		} else if (cmd.equals("torus")) {
+		    c.torus(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(),
+			     sc.nextDouble(), sc.nextDouble());
 		} else if (cmd.equals("scale")) {
 		    c.scale(sc.nextDouble(), sc.nextDouble(), sc.nextDouble());
 		} else if (cmd.equals("move")) {
