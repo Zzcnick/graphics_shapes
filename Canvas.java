@@ -124,7 +124,7 @@ public class Canvas {
     public boolean box(double x, double y, double z, 
 		       double dx, double dy, double dz, Pixel p) {
 	Matrix em = box_edges(x,y,z,dx,dy,dz,p);
-	matrix.append(em);
+	edges.append(em);
 	return true;
     }
     public boolean box(double x, double y, double z, 
@@ -149,18 +149,46 @@ public class Canvas {
 	return em;
     }
     public Matrix box_edges(double x, double y, double z, 
-			    double dx, double dy, double dz, Pixel p) {
+			    double dx, double dy, double dz) {
 	    return box_edges(x, y, z, dx, dy, dz, new Pixel(0,0,0));
     }
 
     public boolean sphere(double x, double y, double z, double r, Pixel p) {
-	return false;
+	Matrix em = sphere_edges(x,y,z,r,p);
+	edges.append(em);
+	return true;
     }
     public boolean sphere(double x, double y, double z, double r) {
 	return sphere(x, y, z, r, new Pixel(0,0,0));
     }
     public Matrix sphere_edges(double x, double y, double z, double r, Pixel p) {
-	return new Matrix();
+	Matrix em = new Matrix();
+	double s = 0; // Semicircle
+	double t = 0; // Rotation
+	double ds = Math.PI / 180; // Semicircle Step
+	double dt = ds; // Rotation Step
+	double cx, cy;
+	Matrix left = new Matrix(); // Rotation About x-axis
+	left.set(1,1,Math.cos(dt));
+	left.set(2,2,Math.cos(dt));
+	left.set(1,2,-1 * Math.sin(dt));
+	left.set(2,1,Math.sin(dt));
+	
+	for (t; t < 2 * Math.PI + dt/2; t += dt) {
+	    for (s; s < Math.PI + ds/2; s += ds) {
+		cx = r * Math.cos(s);
+		cy = r * Math.sin(s);
+		em.add_edge(cx, cy, cx, cy, p); // Change Later
+	    }
+	    em = left.multiply(em); // Rotate by dt
+	} 
+
+	Matrix move = Matrix.identity(4);
+	move.set(0,3,x);
+	move.set(1,3,y);
+	move.set(2,3,z);
+	em = move.multiply(em);
+	return em;
     }
     public Matrix sphere_edges(double x, double y, double z, double r) {
 	return sphere_edges(x, y, z, r, new Pixel(0,0,0));
