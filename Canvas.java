@@ -163,31 +163,29 @@ public class Canvas {
     }
     public Matrix sphere_edges(double x, double y, double z, double r, Pixel p) {
 	Matrix em = new Matrix();
-	double s = 0; // Semicircle
-	double t = 0; // Rotation
-	double ds = Math.PI / 180; // Semicircle Step
+	double s; // Semicircle
+	double t; // Rotation
+	double ds = Math.PI / 60; // Semicircle Step
 	double dt = ds; // Rotation Step
 	double cx, cy;
-	Matrix left = new Matrix(); // Rotation About x-axis
-	left.set(1,1,Math.cos(dt));
-	left.set(2,2,Math.cos(dt));
-	left.set(1,2,-1 * Math.sin(dt));
-	left.set(2,1,Math.sin(dt));
-	
-	for (t; t < 2 * Math.PI + dt/2; t += dt) {
-	    for (s; s < Math.PI + ds/2; s += ds) {
+	for (t = 0; t < 2 * Math.PI + dt/2; t += dt) {
+	    for (s = 0; s < Math.PI + ds/2; s += ds) {
 		cx = r * Math.cos(s);
 		cy = r * Math.sin(s);
 		em.add_edge(cx, cy, cx, cy, p); // Change Later
 	    }
-	    em = left.multiply(em); // Rotate by dt
+	    Matrix left = Matrix.identity(4); // Rotation About x-axis
+	    left.set(1,1,Math.cos(dt));
+	    left.set(2,2,Math.cos(dt));
+	    left.set(1,2,-1 * Math.sin(dt));
+	    left.set(2,1,Math.sin(dt));
+	    em.copy(left.multiply(em)); // Rotate by dt
 	} 
-
 	Matrix move = Matrix.identity(4);
 	move.set(0,3,x);
 	move.set(1,3,y);
 	move.set(2,3,z);
-	em = move.multiply(em);
+	em.copy(move.multiply(em));
 	return em;
     }
     public Matrix sphere_edges(double x, double y, double z, double r) {
@@ -195,13 +193,40 @@ public class Canvas {
     }
 
     public boolean torus(double x, double y, double z, double r, double R, Pixel p) {
-	return false;
+	Matrix em = torus_edges(x,y,z,r,R,p);
+	edges.append(em);
+	return true;
     }
     public boolean torus(double x, double y, double z, double r, double R) {
 	return torus(x, y, z, r, R, new Pixel(0,0,0));
     }
+    // To Make More Efficient
     public Matrix torus_edges(double x, double y, double z, double r, double R, Pixel p) {
-	return new Matrix();
+	Matrix em = new Matrix();
+	double s; // Circle
+	double t; // Rotation
+	double ds = Math.PI / 60; // Circle Step
+	double dt = ds * 2; // Rotation Step
+	double cx, cy;
+	for (t = 0; t < 2 * Math.PI + dt/2; t += dt) {
+	    for (s = 0; s < 2 * Math.PI + ds/2; s += ds) {
+		cx = R + r * Math.cos(s);
+		cy = r * Math.sin(s);
+		em.add_edge(cx, cy, cx, cy, p); // Change Later
+	    }
+	    Matrix left = Matrix.identity(4); // Rotation About y-axis
+	    left.set(0,0,Math.cos(dt));
+	    left.set(2,2,Math.cos(dt));
+	    left.set(0,2,-1 * Math.sin(dt));
+	    left.set(2,0,Math.sin(dt));
+	    em.copy(left.multiply(em)); // Rotate by dt
+	}
+	Matrix move = Matrix.identity(4);
+	move.set(0,3,x);
+	move.set(1,3,y);
+	move.set(2,3,z);
+	em.copy(move.multiply(em));
+	return em;
     }
     public Matrix torus_edges(double x, double y, double z, double r, double R) {
 	return torus_edges(x, y, z, r, R, new Pixel(0,0,0));

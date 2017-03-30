@@ -11,29 +11,32 @@ public class Picture {
 	    Scanner sc = new Scanner(file);
 
 	    String cmd = "";
+	    Pixel color = new Pixel(0,0,0); // Black
 	    while (sc.hasNext()) {
 		cmd = sc.next(); // Command
 		
 		// Processing
 		if (cmd.equals("line")) {
 		    c.edge(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(),
-			   sc.nextDouble(), sc.nextDouble(), sc.nextDouble());
+			   sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), color);
 		} else if (cmd.equals("bezier")) {
 		    c.bezier(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble(),
-			     sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble());
+			     sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), color);
 		} else if (cmd.equals("hermite")) {
 		    c.hermite(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble(),
-			      sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble());
+			      sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), color);
 		} else if (cmd.equals("circle")) {
-		    c.circle(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble());
+		    c.circle(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), color);
 		} else if (cmd.equals("box")) {
 		    c.box(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(),
-			  sc.nextDouble(), sc.nextDouble(), sc.nextDouble());
+			  sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), color);
 		} else if (cmd.equals("sphere")) {
-		    c.sphere(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble());
+		    c.sphere(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), color);
 		} else if (cmd.equals("torus")) {
 		    c.torus(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(),
-			     sc.nextDouble(), sc.nextDouble());
+			    sc.nextDouble(), sc.nextDouble(), color);
+		} else if (cmd.equals("color")) {
+		    color = new Pixel(sc.nextInt(), sc.nextInt(), sc.nextInt());
 		} else if (cmd.equals("scale")) {
 		    c.scale(sc.nextDouble(), sc.nextDouble(), sc.nextDouble());
 		} else if (cmd.equals("move")) {
@@ -50,11 +53,15 @@ public class Picture {
 		    c.draw();
 		} else if (cmd.equals("save")) {
 		    c.save(sc.next());
+		} else if (cmd.equals("reset")) {
+		    c = new Canvas(sc.nextInt(), sc.nextInt(),
+				   sc.nextInt(), sc.nextInt(), sc.nextInt());
 		}
 	    }
 	    return;
 	} 
-	// Curves  ============================
+
+	/* // Curves  ============================
 	Canvas c = new Canvas(500, 500, 0, 40, 60);
 	Pixel p = new Pixel(240, 250, 255);
 	// int frame = 0;

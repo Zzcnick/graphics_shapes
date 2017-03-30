@@ -90,9 +90,9 @@ public class Matrix {
     public int append(Matrix m) {
 	int l = m.getColumns();
 	int i = 0;
+	ArrayList<Pixel> ps = m.getColors();
 	while (i < l) {
-	    add_edge(m.getColumn(i), m.getColumn(i+1));
-	    colors.add(m.getColor(i/2));
+	    add_edge(m.getColumn(i), m.getColumn(i+1), m.getColor(i/2));
 	    i+=2;
 	}
 	return i;
@@ -125,9 +125,15 @@ public class Matrix {
 	    ret[i] = matrix.get(c)[i];
 	return ret;
     }
+    public ArrayList<double[]> getEdges() {
+	return matrix;
+    }
 
     public Pixel getColor(int i) {
 	return colors.get(i);
+    }
+    public ArrayList<Pixel> getColors() {
+	return colors;
     }
 
     // Matrix Functions
